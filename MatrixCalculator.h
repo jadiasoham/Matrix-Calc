@@ -3,13 +3,11 @@
 
 #include "Matrix.h"
 
-using namespace std;
-
 class MatrixCalculator {
 public:
-    vector<vector<int>> addMatrices(const Matrix& A, const Matrix& B);
-    vector<vector<int>> subtractMatrices(const Matrix& A, const Matrix& B);
-    vector<vector<int>> multiplyMatrices(const Matrix& A, const Matrix& B);
+    std::vector<std::vector<int>> addMatrices(const Matrix& A, const Matrix& B);
+    std::vector<std::vector<int>> subtractMatrices(const Matrix& A, const Matrix& B);
+    std::vector<std::vector<int>> multiplyMatrices(const Matrix& A, const Matrix& B);
     double determinant(const Matrix& A);
 };
 
