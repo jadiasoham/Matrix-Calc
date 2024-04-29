@@ -1,81 +1,116 @@
+```markdown
 # Matrix Calculator
 
-This is a simple C++ program that provides basic matrix operations such as addition, subtraction, multiplication, and determinant calculation.
+This project consists of two main components: the Matrix class and the MatrixCalculator class. The Matrix class provides functionality for creating and manipulating matrices, while the MatrixCalculator class offers various matrix operations such as addition, subtraction, element-wise product, and dot product.
 
-## Features
+## Matrix Class
 
-- Addition of two matrices
-- Subtraction of two matrices
-- Multiplication of two matrices
-- Determinant calculation of a square matrix
-- Transpose of a matrix (upcoming)
-- Calculation of matrix rank (upcoming)
-- Matrix transformations (upcoming)
+### Constructor
+
+- `Matrix(const std::vector<std::vector<int>>& input)`: Constructs a matrix object from a given 2D vector of integers.
+
+### Public Methods
+
+- `std::vector<std::vector<int>> getData() const`: Returns the data stored in the matrix.
+- `int getRows() const`: Returns the number of rows in the matrix.
+- `int getCols() const`: Returns the number of columns in the matrix.
+- `double determinant()`: Computes the determinant of the matrix.
+- `Matrix transpose()`: Computes the transpose of the matrix.
+- `int rank()`: Computes the rank of the matrix.
+- `void display()`: Displays the contents of the matrix.
+
+## MatrixCalculator Class
+
+### Public Methods
+
+- `Matrix addMatrices(const Matrix& A, const Matrix& B)`: Adds two matrices element-wise.
+- `Matrix subtractMatrices(const Matrix& A, const Matrix& B)`: Subtracts one matrix from another element-wise.
+- `Matrix elementWiseProduct(const Matrix& A, const Matrix& B)`: Computes the element-wise product of two matrices.
+- `Matrix dotProduct(const Matrix& A, const Matrix& B)`: Computes the dot product of two matrices.
 
 ## Usage
 
-### Compilation
+### Matrix Class
 
-To compile the program, ensure you have a C++ compiler installed on your system. Then, navigate to the directory containing the source code and execute the following command:
-
-```bash
-g++ main.cpp -o matrix_calculator
-```
-
-### Running the Program
-
-After compiling, run the executable file:
-
-```bash
-./matrix_calculator
-```
-
-The program will execute without any output as the `main` function is currently empty. To use the matrix calculator functions, you can include this header file in your own C++ program and instantiate the `MatrixCalculation` class.
-
-### Example Usage
-
-Here's an example of how to use the matrix calculator functions:
+#### Creating a Matrix
 
 ```cpp
-#include "MatrixCalculation.h"
-#include <iostream>
+#include "Matrix.h"
 
-int main() {
-    MatrixCalculation matrixCalc;
-
-    // Example matrices
-    std::vector<std::vector<int>> A = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    std::vector<std::vector<int>> B = {{9, 8, 7}, {6, 5, 4}, {3, 2, 1}};
-
-    // Addition
-    std::vector<std::vector<int>> sum = matrixCalc.addMatrices(A, B);
-    std::cout << "Sum of matrices A and B:" << std::endl;
-    printMatrix(sum);
-
-    // Subtraction
-    std::vector<std::vector<int>> difference = matrixCalc.subtractMatrices(A, B);
-    std::cout << "Difference of matrices A and B:" << std::endl;
-    printMatrix(difference);
-
-    // Multiplication
-    std::vector<std::vector<int>> product = matrixCalc.multiplyMatrices(A, B);
-    std::cout << "Product of matrices A and B:" << std::endl;
-    printMatrix(product);
-
-    // Determinant
-    int detA = matrixCalc.determinant(A);
-    std::cout << "Determinant of matrix A: " << detA << std::endl;
-
-    return 0;
-}
+// Create a matrix with provided data
+std::vector<std::vector<int>> data = {{1, 2}, {3, 4}};
+Matrix A(data);
 ```
 
-## Contributing
+#### Accessing Matrix Properties
 
-Feel free to contribute to this project by forking the repository, making changes, and submitting a pull request. Suggestions, improvements, and bug fixes are welcome!
+```cpp
+#include "Matrix.h"
+
+Matrix A(data);
+
+// Get the number of rows and columns
+int rows = A.getRows();
+int cols = A.getCols();
+```
+
+#### Performing Matrix Operations
+
+```cpp
+#include "Matrix.h"
+
+Matrix A(data);
+
+// Compute determinant
+double det = A.determinant();
+
+// Transpose the matrix
+Matrix transposed = A.transpose();
+
+// Calculate the rank of the matrix
+int matrixRank = A.rank();
+```
+
+#### Displaying Matrix Contents
+
+```cpp
+#include "Matrix.h"
+
+Matrix A(data);
+
+// Display matrix contents
+A.display();
+```
+
+### MatrixCalculator Class
+
+#### Creating a MatrixCalculator Object
+
+```cpp
+#include "MatrixCalculator.h"
+
+MatrixCalculator calculator;
+```
+
+#### Performing Matrix Operations
+
+```cpp
+#include "MatrixCalculator.h"
+
+// Add two matrices
+Matrix sum = calculator.addMatrices(A, B);
+
+// Subtract one matrix from another
+Matrix difference = calculator.subtractMatrices(A, B);
+
+// Compute element-wise product
+Matrix elementWiseProduct = calculator.elementWiseProduct(A, B);
+
+// Compute dot product
+Matrix dotProduct = calculator.dotProduct(A, B);
+```
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
+```
