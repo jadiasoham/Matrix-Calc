@@ -8,6 +8,9 @@ This is a simple C++ program that provides basic matrix operations such as addit
 - Subtraction of two matrices
 - Multiplication of two matrices
 - Determinant calculation of a square matrix
+- Transpose of a matrix (upcoming)
+- Calculation of matrix rank (upcoming)
+- Matrix transformations (upcoming)
 
 ## Usage
 
