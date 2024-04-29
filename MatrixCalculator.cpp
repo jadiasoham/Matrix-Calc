@@ -10,12 +10,10 @@
  * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
  */
 Matrix MatrixCalculator::addMatrices(const Matrix& A, const Matrix& B) {
-    // Check if matrices are of compatible dimensions or are empty
     if (A.getRows() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
         throw std::runtime_error("Matrices are of incompatible dimensions and hence cannot be added.");
     }
     
-    // Add matrices
     std::vector<std::vector<int>> result(A.getRows(), std::vector<int>(A.getCols(), 0));
     for (size_t i = 0; i < A.getRows(); ++i) {
         for (size_t j = 0; j < A.getCols(); ++j) {
