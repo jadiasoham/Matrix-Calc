@@ -9,10 +9,6 @@ public:
     Matrix subtractMatrices(const Matrix& A, const Matrix& B);
     Matrix elementWiseProduct(const Matrix& A, const Matrix& B);
     Matrix dotProduct(const Matrix& A, const Matrix& B);
-    double determinant(const Matrix& A);
-    void displayMatrix(const Matrix& A);
-    Matrix transposeMatrix(const Matrix& matrix);
-    int rank(const Matrix& matrix);
 };
 
 #endif

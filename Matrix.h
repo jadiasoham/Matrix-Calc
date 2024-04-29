@@ -12,6 +12,10 @@ public:
     std::vector<std::vector<int>> getData() const;
     int getRows() const;
     int getCols() const;
+    double determinant();
+    Matrix transpose();
+    int rank();
+    void display();
 };
 
 #endif
