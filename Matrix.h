@@ -3,15 +3,13 @@
 
 #include <vector>
 
-using namespace std;
-
 class Matrix {
 private:
-    vector<vector<int>> data;
+    std::vector<std::vector<int>> data;
 
 public:
-    Matrix(const vector<vector<int>>& input);
-    vector<vector<int>> getData() const;
+    Matrix(const std::vector<std::vector<int>>& input);
+    std::vector<std::vector<int>> getData() const;
     int getRows() const;
     int getCols() const;
 };
