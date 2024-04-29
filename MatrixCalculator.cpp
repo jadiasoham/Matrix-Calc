@@ -9,7 +9,7 @@
  * @return The result of adding the matrices.
  * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
  */
-std::vector<std::vector<int>> MatrixCalculator::addMatrices(const Matrix& A, const Matrix& B) {
+Matrix MatrixCalculator::addMatrices(const Matrix& A, const Matrix& B) {
     // Check if matrices are of compatible dimensions or are empty
     if (A.getRows() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
         throw std::runtime_error("Matrices are of incompatible dimensions and hence cannot be added.");
@@ -22,7 +22,7 @@ std::vector<std::vector<int>> MatrixCalculator::addMatrices(const Matrix& A, con
             result[i][j] = A.getData()[i][j] + B.getData()[i][j];
         }
     }
-    return result;
+    return Matrix(result);
 }
 
 /**
@@ -33,7 +33,7 @@ std::vector<std::vector<int>> MatrixCalculator::addMatrices(const Matrix& A, con
  * @return The result of subtracting matrix B from matrix A.
  * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
  */
-std::vector<std::vector<int>> MatrixCalculator::subtractMatrices(const Matrix& A, const Matrix& B) {
+Matrix MatrixCalculator::subtractMatrices(const Matrix& A, const Matrix& B) {
     if (A.getRows() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
         throw std::runtime_error("Matrices are of incompatible dimenesions and hence cannot be subtracted.");
     }
@@ -44,7 +44,7 @@ std::vector<std::vector<int>> MatrixCalculator::subtractMatrices(const Matrix& A
             result[i][j] = A.getData()[i][j] - B.getData()[i][j];
         }
     }
-    return result;
+    return Matrix(result);
 }
 
 /**
@@ -55,7 +55,7 @@ std::vector<std::vector<int>> MatrixCalculator::subtractMatrices(const Matrix& A
  * @return The result of multiplying the matrices element-wise.
  * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
  */
-std::vector<std::vector<int>> MatrixCalculator::elementWiseProduct(const Matrix& A, const Matrix& B) {
+Matrix MatrixCalculator::elementWiseProduct(const Matrix& A, const Matrix& B) {
     // Check compatibility: number of columns of A must be equal to number of rows of B
     if (A.getCols() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
         throw std::runtime_error("Matrices are not of compatible dimension and hence cannot be multiplied.");
@@ -72,7 +72,7 @@ std::vector<std::vector<int>> MatrixCalculator::elementWiseProduct(const Matrix&
             }
         }
     }
-    return result;
+    return Matrix(result);
 }
 
 /**
@@ -83,7 +83,7 @@ std::vector<std::vector<int>> MatrixCalculator::elementWiseProduct(const Matrix&
  * @return The result of the dot product operation.
  * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
  */
-std::vector<std::vector<int>> MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
+Matrix MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
     // Check compatibility:
     if (A.getCols() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
         throw std::runtime_error("Matrices are not of compatible dimension and hence cannot be multiplied.");
@@ -98,7 +98,7 @@ std::vector<std::vector<int>> MatrixCalculator::dotProduct(const Matrix& A, cons
             }
         }
     }
-    return result;
+    return Matrix(result);
 }
 
 /**
@@ -147,4 +147,66 @@ void MatrixCalculator::displayMatrix(const Matrix& A) {
         }
         std::cout << std::endl;
     }
+}
+
+/**
+ * @brief Produces transpose of a matrix
+ * 
+ * @param matrix The matrix to be transposed
+ * 
+ * @return The transposed matrix
+*/
+Matrix MatrixCalculator::transposeMatrix(const Matrix& matrix) {
+    size_t rows = matrix.getRows();
+    size_t cols = matrix.getCols();
+
+    // Initialize the transpose matrix with appropriate dimensions
+    std::vector<std::vector<int>> transposedData(cols, std::vector<int>(rows));
+
+    // Transpose the matrix
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            transposedData[j][i] = matrix.getData()[i][j];
+        }
+    }
+    return Matrix(transposedData);
+}
+
+/**
+ * @brief Calculate the rank of a matrix
+ * 
+ * @param matrix The matrix whose rank is to be calculated
+ * 
+ * @return The rank of a matrix as an int
+*/
+int MatrixCalculator::rank(const Matrix& matrix) {
+    // Transpose the matrix the bring it into the row echelon form
+    Matrix transposed = transposeMatrix(matrix);
+
+    size_t rows = transposed.getRows();
+    size_t cols = transposed.getCols();
+
+    size_t rank = 0;
+    size_t col = 0;
+
+    // Row reduction to bring it into row echelon form:
+    for (size_t row = 0; row < rows; ++row) {
+        // Find the first non zero element in the current column:
+        while (col < cols && transposed.getData()[row][col] == 0) {
+            ++col;
+        }
+
+        // If we find non zero elements, increment the rank and continue row reduction
+        if (col < cols) {
+            rank++;
+            // Eliminate non zero elements below current pivot
+            for (size_t i = row + 1; i < rows; ++i) {
+                int factor = transposed.getData()[i][col] / transposed.getData()[row][col];
+                for (size_t j = col; j < cols; ++j) {
+                    transposed.getData()[i][j] -= factor * transposed.getData()[row][j];
+                }
+            }
+        }
+    }
+    return rank;
 }
