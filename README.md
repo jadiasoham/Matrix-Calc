@@ -1,4 +1,3 @@
-```markdown
 # Matrix Calculator
 
 This project consists of two main components: the Matrix class and the MatrixCalculator class. The Matrix class provides functionality for creating and manipulating matrices, while the MatrixCalculator class offers various matrix operations such as addition, subtraction, element-wise product, and dot product.
@@ -113,4 +112,3 @@ Matrix dotProduct = calculator.dotProduct(A, B);
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
