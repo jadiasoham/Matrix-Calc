@@ -98,3 +98,7 @@ Matrix MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
     }
     return Matrix(result);
 }
+
+int main() {
+    return 0;
+}
