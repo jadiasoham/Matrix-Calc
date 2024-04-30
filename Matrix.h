@@ -9,6 +9,7 @@ private:
 
 public:
     Matrix(const std::vector<std::vector<int>>& input);
+    Matrix::Matrix(const std::vector<std::vector<double>>& input);
     std::vector<std::vector<int>> getData() const;
     int getRows() const;
     int getCols() const;

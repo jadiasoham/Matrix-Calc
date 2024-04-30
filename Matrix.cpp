@@ -7,6 +7,18 @@
  * @param input The input data representing the matrix.
  */
 Matrix::Matrix(const std::vector<std::vector<int>>& input) : data(input) {}
+// Overload the constructor:
+Matrix::Matrix(const std::vector<std::vector<double>>& input) {
+    //Convert double data to int
+    std::vector<std::vector<int>> intData(input.size());
+    for (size_t i = 0; i < input.size(); ++i) {
+        intData[i].resize(input.size());
+        for (size_t j = 0; j < input[i].size(); ++j) {
+            intData[i][j] = static_cast<int>(input[i][j]);
+        }
+    }
+    data = intData;
+}
 
 /**
  * @brief Retrieves the data of the matrix.
@@ -138,4 +150,74 @@ void Matrix::display() {
         }
         std::cout<<std::endl;
     }
+}
+
+/**
+ * @brief Computes the inverse of a matrix using the Gauss-Jordan elimination.
+ * 
+ * @return The inverse of a matrix.
+ * 
+ * @throw std::runtime_error If matrix is not square or matrix is singular.
+*/
+Matrix Matrix::inverse() {
+    //Check if matrix is square:
+    if (data.size() != data[0].size()) {
+        throw std::runtime_error("Inverse can only be computed for a square matrix.");
+    }
+
+
+    //Helper function to perform row operations and make elements below diagonal zero.
+    auto makeElementsBelowZero = [this](size_t row, size_t col) {
+        for (size_t i = 0; i < data.size(); ++i) {
+            if (i != row) {
+                double factor = data[i][col];
+                for (size_t j = 0; j < data[i].size(); ++j) {
+                    data[i][j] -= factor * data[row][j];
+                }
+            }
+        }
+    };
+    // Helper function to perform row operations and make diagonal elements one.
+    auto makeDiagonalOne = [this](size_t row, size_t col) {
+        double pivot = data[row][col];
+        for (size_t i = col; i < data[row].size(); ++i) {
+            data[row][i] /= pivot;
+        }
+    };
+    size_t n = data.size();
+    // Create an augmented matrix [A|I]
+    std::vector<std::vector<double>> augmentedMatrix(n, std::vector<double>(2*n, 0));
+    for (size_t i = 0; i < n; ++i) {
+        augmentedMatrix[i][n + i] = 1; //Identity part
+        for (size_t j = 0; j < n; ++j) {
+            augmentedMatrix[i][j] = data[i][j]; //Original matrix part
+        }
+    }
+    // Apply Gauss-Jordan elimination:
+    for (size_t i = 0; i < n; ++i) {
+        // Find the pivot for the current row:
+        size_t pivotRow = i;
+        while (pivotRow < n && augmentedMatrix[pivotRow][i] == 0) {
+            ++pivotRow;
+        }
+        if (pivotRow == n) {
+            throw std::runtime_error("This is a singular matrix, hence inverse cannot be computed.");
+        }
+        // Swap the pivot row with the current row:
+        if (pivotRow != i) {
+            std::swap(augmentedMatrix[i], augmentedMatrix[pivotRow]);
+        }
+        // Make diagonal element one:
+        makeDiagonalOne(i, i);
+
+        //Make elements below diagonal zero:
+        makeElementsBelowZero(i, i);
+    }
+    std::vector<std::vector<double>> inverseMatrix(n, std::vector<double>(n, 0));
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = 0; j < n; ++j) {
+            inverseMatrix[i][j] = augmentedMatrix[i][j + n];
+        }
+    }
+    return Matrix(inverseMatrix);
 }
