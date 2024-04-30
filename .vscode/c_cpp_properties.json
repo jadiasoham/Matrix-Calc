@@ -4,7 +4,9 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/"
+                "C:/",
+                "${workspaceFolder}/src",
+                "C:/Program Files/CMake/bin"
             ],
             "defines": [
                 "_DEBUG",
