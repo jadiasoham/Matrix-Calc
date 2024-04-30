@@ -17,6 +17,7 @@ This project consists of two main components: the Matrix class and the MatrixCal
 - `Matrix transpose()`: Computes the transpose of the matrix.
 - `int rank()`: Computes the rank of the matrix.
 - `void display()`: Displays the contents of the matrix.
+- `Matrix inverse()`: Computes the iverse of the matrix.
 
 ## MatrixCalculator Class
 
