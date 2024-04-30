@@ -16,6 +16,7 @@ public:
     Matrix transpose();
     int rank();
     void display();
+    Matrix inverse();
 };
 
 #endif
