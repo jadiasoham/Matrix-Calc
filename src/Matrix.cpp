@@ -1,6 +1,4 @@
 #include "Matrix.h"
-#include <iostream>
-#include <numeric>
 
 /**
  * @brief Constructs a matrix from the given input data.
@@ -55,12 +53,12 @@ int Matrix::getCols() const {
  * @brief Computes the determinant of the matrix.
  * 
  * @return The determinant of the matrix.
- * @throw std::runtime_error If the matrix is not square or empty.
+ * @throw std::invalid_argument If the matrix is not square or empty.
  */
 double Matrix::determinant() {
     // Check if non-empty square matrix;
     if (data.size() != data[0].size() || data.empty()) {
-        throw std::runtime_error("Determinant can only be calculated for a non-empty square matrix.");
+        throw std::invalid_argument("Determinant can only be calculated for a non-empty square matrix.");
     }
 
     size_t n = data.size();
@@ -155,11 +153,11 @@ int Matrix::rank() {
  * @brief Computes the trace of a matrix:
  * 
  * @return The trace of a matrix
- * @exception Throws runtime error if matrix is not square or is empty
+ * @exception Throws invalid argument error if matrix is not square or is empty
 */
 double Matrix::trace() {
     if (data.size() != data[0].size() || data.empty()) {
-        throw std::runtime_error("Trace is defined only for a square matrix");
+        throw std::invalid_argument("Trace is defined only for a square matrix");
     }
     double trace = 0.0; //initiate the sum of diagonal elements
     for (size_t i = 0; i < data.size(); ++i) {
@@ -189,12 +187,12 @@ void Matrix::display() {
  * 
  * @return The inverse of a matrix.
  * 
- * @throw std::runtime_error If matrix is not square or matrix is singular.
+ * @throw std::invalid_argument If matrix is not square or matrix is singular.
 */
 Matrix Matrix::inverse() {
     //Check if matrix is square:
     if (data.size() != data[0].size()) {
-        throw std::runtime_error("Inverse can only be computed for a square matrix.");
+        throw std::invalid_argument("Inverse can only be computed for a square matrix.");
     }
 
 
@@ -233,7 +231,7 @@ Matrix Matrix::inverse() {
             ++pivotRow;
         }
         if (pivotRow == n) {
-            throw std::runtime_error("This is a singular matrix, hence inverse cannot be computed.");
+            throw std::invalid_argument("This is a singular matrix, hence inverse cannot be computed.");
         }
         // Swap the pivot row with the current row:
         if (pivotRow != i) {

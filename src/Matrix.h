@@ -2,6 +2,10 @@
 #define MATRIX_H
 
 #include <vector>
+#include <iostream>
+#include <numeric>
+#include <stdexcept>
+#include <cmath>
 
 class Matrix {
 private:

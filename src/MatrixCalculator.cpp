@@ -99,6 +99,143 @@ Matrix MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
     return Matrix(result);
 }
 
+/**
+ * @brief Finds the maximum off-diagonal element of a matrix.
+ * 
+ * @tparam T Type of elements in the matrix.
+ * @param matrix The matrix.
+ * @param p Reference to store the row index of the maximum off-diagonal element.
+ * @param q Reference to store the column index of the maximum off-diagonal element.
+ * @param maxOffDiagonal Reference to store the value of the maximum off-diagonal element.
+ */
+template<typename T>
+void MatrixCalculator::findMaxOffDiagonal(const std::vector<std::vector<T>>& matrix, int& p, int& q, T& maxOffDiagonal) {
+    int n matrix.size();
+    maxOffDiagonal = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (std::abs(matrix[i][j]) > maxOffDiagonal) {
+                maxOffDiagonal = std::abs(matrix[i][j]);
+                p  = i;
+                q = j;
+            }
+        }
+    }
+}
+
+/**
+ * @brief Computes eigenvalues and eigenvectors of a square matrix using the Jacobi eigenvalue algorithm.
+ * 
+ * @tparam T Type of elements in the matrix.
+ * @param matrix The input matrix.
+ * @return A pair containing eigenvalues and corresponding eigenvectors.
+ * @throw std::invalid_argument If the input matrix is not square.
+ */
+template<typename T>
+std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiEigen(const std::vector<std::vector<T>>& matrix) {
+    int n = matrix.size();
+
+    //checks for square matrix:
+    if (n != matrix[0].size()) {
+        throw std::invalid_argument("Matrix must be square.");
+    }
+
+    //initialize the eigen vector matrix as an identity matrix:
+    std::vector<std::vector<T>> eigenVectors(n, std::vector<T>(n, 0));
+    for (int i = 0; i < n; ++i) {
+        eigenVectors[i][i] = 1;
+    }
+
+    //initialize the tolerance and maximum iterations:
+    const T tolerance = 1e-10;
+    const T toleranceChange = 0.1 * tolerance // Maximum 10% of tolerance change to consider the algo converged 
+    const int maxIter = 1000;
+
+    //initialize the variables:
+    int p, q;
+    T maxOffDiagonal, prevMaxOffDiagonal, theta, t, c, s;
+
+    //perform jacobi iterations:
+    int iterations = 0;
+    while(true) {
+        //find max diagonal element:
+        findMaxOffDiagonal(matrix, p, q, maxOffDiagonal);
+
+        // Check for convergence:
+        if (maxOffDiagonal < tolerance || std::abs(maxOffDiagonal - prevMaxOffDiagonal) < toleranceChange || iterations > maxIter) {
+            break;
+        }
+
+        // Store the current max off-diagonal element for the next iteration:
+        prevMaxOffDiagonal = maxOffDiagonal;
+
+        //compute the rotation angle:
+        theta = 0.5 * std::atan2(2 * matrix[p][q], matrix[q][q] - matrix[p][p]);
+
+        //sine and cosine of the rotation angle:
+        s = std::sin(theta);
+        c = std::cos(theta);
+
+        //compute elements of rotation matrix;
+        T tau = s/(c + 1);
+        t = s/(1 + c);
+        c = 1/std::sqrt(1 + t * t);
+        s = t * c;
+
+        //perform similarity transformation:
+        for (int i = 0; i < n; ++i) {
+            if (i != p && i != q) {
+                T a_ip = matrix[i][p];
+                T a_iq = matrix[i][q];
+                matrix[i][p] = c * a_ip - s * a_iq;
+                matrix[p][i] = matrix[i][p];
+                matrix[i][q] = c * a_iq - s * a_ip;
+                matrix[q][i] = matrix[i][q];
+            }
+        }
+
+        T a_pp = matrix[p][p];
+        T a_qq = matrix[q][q];
+        matrix[p][p] = (c * c) * a_pp - 2 * (c * s) * matrix[p][q] + (s * s) * a_qq;
+        matrix[q][q] = (s * s) * a_pp + 2 * (c * s) * matrix[p][q] + (c * c) * a_qq;
+        matrix[p][q] = matrix[q][p] = 0;
+
+        //update the eigen vectors:
+        for (int i = 0; i < n; ++i) {
+            T v_ip = eigenVectors[i][p];
+            T v_iq = eigenVectors[i][p];
+            eigenVectors[i][p] = c * v_ip - s * v_iq;
+            eigenVectors[i][q] = c * v_iq + s * v_ip;
+        }
+        iterations++;
+    }
+    //extract the eigenvalues:
+    std::vector<T> eigenvalues(n);
+    for (int i = 0; i < n; ++i) {
+        eigenvalues[i] = matrix[i][i];
+    }
+
+    return std::make_pair(eigenvalues, eigenVectors);
+}
+
+/**
+ * @brief Computes the eigenvalues and eigenvectors of a square matrix using the Jacobi eigenvalue algorithm.
+ * 
+ * This method calculates the eigenvalues and eigenvectors of a square matrix using the Jacobi eigenvalue algorithm,
+ * which iteratively diagonalizes the input matrix by performing similarity transformations until convergence.
+ * The algorithm returns a pair containing the eigenvalues matrix and the eigenvectors matrix.
+ * 
+ * @param A The square matrix for which eigenvalues and eigenvectors are to be computed.
+ * @return A pair containing the eigenvalues matrix and the eigenvectors matrix.
+ * @throw std::invalid_argument If the input matrix is not square.
+ */
+std::pair<Matrix, Matrix> MatrixCalculator::eigen(const Matrix& A) {
+    auto result = jacobiEigen(A.getData());
+    Matrix eigenvalues({result.first});
+    Matrix eigenVectors(result.second);
+    return std::make_pair(eigenvalues, eigenVectors);
+}
+
 int main() {
     return 0;
 }
