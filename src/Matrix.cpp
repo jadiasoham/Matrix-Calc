@@ -161,7 +161,7 @@ double Matrix::trace() {
     if (data.size() != data[0].size() || data.empty()) {
         throw std::runtime_error("Trace is defined only for a square matrix");
     }
-    double trace = 0.0; //initiate the sum of diagonal elements:
+    double trace = 0.0; //initiate the sum of diagonal elements
     for (size_t i = 0; i < data.size(); ++i) {
         for (size_t j = 0; j < data.size(); ++j) {
             if (i == j) {
