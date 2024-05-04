@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include <iostream>
+#include <numeric>
 
 /**
  * @brief Constructs a matrix from the given input data.
@@ -59,29 +60,40 @@ int Matrix::getCols() const {
 double Matrix::determinant() {
     // Check if non-empty square matrix;
     if (data.size() != data[0].size() || data.empty()) {
-        throw std::runtime_error("Determinant can only be calculated for a non empty square matrix");
+        throw std::runtime_error("Determinant can only be calculated for a non-empty square matrix.");
     }
 
-    int n = data.size();
+    size_t n = data.size();
+
     if (n == 1) {
         return data[0][0];
-    }
-    double det = 0.0;
-    for (int i = 0; i < n; ++i) {
-        std::vector<std::vector<int>> minor(n - 1, std::vector<int>(n - 1, 0));
-        for (int j = 1; j < n; ++j) {
-            for (int k = 0; k < n; ++k) {
-                if (k < i) {
-                    minor[j - 1][k] = data[j][k];
-                } else if (k > i) {
-                    minor[j - 1][k - 1] = data[j][k];
+    } else if (n == 2) {
+        return data[0][0] * data[1][1] - data[0][1] * data[1][0];
+    } else {
+        double det = 0.0;
+        std::vector<int> indices(n);
+        std::iota(indices.begin(), indices.end(), 0); // Initialize indices to 0, 1, ..., n-1
+
+        // Calculate the determinant using recursive expansion along the first row
+        for (size_t i = 0; i < n; ++i) {
+            std::vector<std::vector<int>> subMatrix(n - 1, std::vector<int>(n - 1, 0));
+            for (size_t j = 1; j < n; ++j) {
+                for (size_t k = 0; k < n; ++k) {
+                    if (k < i) {
+                        subMatrix[j - 1][k] = data[j][k];
+                    } else if (k > i) {
+                        subMatrix[j - 1][k - 1] = data[j][k];
+                    }
                 }
             }
+            double sign = (i % 2 == 0) ? 1.0 : -1.0;
+            det += sign * data[0][i] * Matrix(subMatrix).determinant();
         }
-        det += (i % 2 == 0 ? 1 : -1) * data[0][i] * Matrix(minor).determinant();
+
+        return det;
     }
-    return det;
 }
+
 
 /**
  * @brief Computes the transpose of the matrix.
@@ -139,6 +151,26 @@ int Matrix::rank() {
     return rank;
 }
 
+/**
+ * @brief Computes the trace of a matrix:
+ * 
+ * @return The trace of a matrix
+ * @exception Throws runtime error if matrix is not square or is empty
+*/
+double Matrix::trace() {
+    if (data.size() != data[0].size() || data.empty()) {
+        throw std::runtime_error("Trace is defined only for a square matrix");
+    }
+    double trace = 0.0; //initiate the sum of diagonal elements:
+    for (size_t i = 0; i < data.size(); ++i) {
+        for (size_t j = 0; j < data.size(); ++j) {
+            if (i == j) {
+                trace += data[i][j];
+            }
+        }
+    }
+    return trace;
+}
 
 /**
  * @brief Displays the contents of the matrix.
