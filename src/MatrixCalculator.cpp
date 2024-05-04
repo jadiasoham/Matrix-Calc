@@ -7,11 +7,11 @@
  * @param A First matrix.
  * @param B Second matrix.
  * @return The result of adding the matrices.
- * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
+ * @throw std::invalid_argument If matrices have incompatible dimensions or are empty.
  */
 Matrix MatrixCalculator::addMatrices(const Matrix& A, const Matrix& B) {
     if (A.getRows() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
-        throw std::runtime_error("Matrices are of incompatible dimensions and hence cannot be added.");
+        throw std::invalid_argument("Matrices are of incompatible dimensions and hence cannot be added.");
     }
     
     std::vector<std::vector<int>> result(A.getRows(), std::vector<int>(A.getCols(), 0));
@@ -29,11 +29,11 @@ Matrix MatrixCalculator::addMatrices(const Matrix& A, const Matrix& B) {
  * @param A First matrix.
  * @param B Second matrix.
  * @return The result of subtracting matrix B from matrix A.
- * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
+ * @throw std::invalid_argument If matrices have incompatible dimensions or are empty.
  */
 Matrix MatrixCalculator::subtractMatrices(const Matrix& A, const Matrix& B) {
     if (A.getRows() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
-        throw std::runtime_error("Matrices are of incompatible dimenesions and hence cannot be subtracted.");
+        throw std::invalid_argument("Matrices are of incompatible dimenesions and hence cannot be subtracted.");
     }
 
     std::vector<std::vector<int>> result(A.getRows(), std::vector<int>(A.getCols(), 0));
@@ -51,12 +51,12 @@ Matrix MatrixCalculator::subtractMatrices(const Matrix& A, const Matrix& B) {
  * @param A First matrix.
  * @param B Second matrix.
  * @return The result of multiplying the matrices element-wise.
- * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
+ * @throw std::invalid_argument If matrices have incompatible dimensions or are empty.
  */
 Matrix MatrixCalculator::elementWiseProduct(const Matrix& A, const Matrix& B) {
     // Check compatibility: number of columns of A must be equal to number of rows of B
     if (A.getCols() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
-        throw std::runtime_error("Matrices are not of compatible dimension and hence cannot be multiplied.");
+        throw std::invalid_argument("Matrices are not of compatible dimension and hence cannot be multiplied.");
     }
 
     // Initialize result matrix with appropriate dimensions
@@ -79,12 +79,12 @@ Matrix MatrixCalculator::elementWiseProduct(const Matrix& A, const Matrix& B) {
  * @param A First matrix.
  * @param B Second matrix.
  * @return The result of the dot product operation.
- * @throw std::runtime_error If matrices have incompatible dimensions or are empty.
+ * @throw std::invalid_argument If matrices have incompatible dimensions or are empty.
  */
 Matrix MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
     // Check compatibility:
     if (A.getCols() != B.getRows() || A.getRows() == 0 || B.getRows() == 0) {
-        throw std::runtime_error("Matrices are not of compatible dimension and hence cannot be multiplied.");
+        throw std::invalid_argument("Matrices are not of compatible dimension and hence cannot be multiplied.");
     }
 
     std::vector<std::vector<int>> result(A.getCols(), std::vector<int>(B.getCols(), 0));
