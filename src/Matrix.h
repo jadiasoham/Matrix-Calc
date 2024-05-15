@@ -9,11 +9,11 @@
 
 class Matrix {
 private:
-    std::vector<std::vector<int>> data;
+    std::vector<std::vector<double>> data;
 
 public:
-    Matrix(const std::vector<std::vector<int>>& input);
-    Matrix(const std::vector<std::vector<double>>& input);
+    Matrix(const std::vector<std::vector<int>>& input); //Constructor for int data
+    Matrix(const std::vector<std::vector<double>>& input); //Constructor for double data
     std::vector<std::vector<int>> getData() const;
     int getRows() const;
     int getCols() const;
