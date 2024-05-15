@@ -5,18 +5,18 @@
  * 
  * @param input The input data representing the matrix.
  */
-Matrix::Matrix(const std::vector<std::vector<int>>& input) : data(input) {}
+Matrix::Matrix(const std::vector<std::vector<double>>& input) : data(input) {}
 // Overload the constructor:
-Matrix::Matrix(const std::vector<std::vector<double>>& input) {
-    //Convert double data to int
-    std::vector<std::vector<int>> intData(input.size());
+Matrix::Matrix(const std::vector<std::vector<int>>& input) {
+    //Convert int data to double
+    std::vector<std::vector<double>> doubleData(input.size());
     for (size_t i = 0; i < input.size(); ++i) {
-        intData[i].resize(input.size());
+        doubleData[i].resize(input.size());
         for (size_t j = 0; j < input[i].size(); ++j) {
-            intData[i][j] = static_cast<int>(input[i][j]);
+            doubleData[i][j] = static_cast<double>(input[i][j]);
         }
     }
-    data = intData;
+    data = doubleData;
 }
 
 /**
