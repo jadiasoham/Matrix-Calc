@@ -235,6 +235,47 @@ std::pair<Matrix, Matrix> MatrixCalculator::eigen(const Matrix& A) {
     Matrix eigenVectors(result.second);
     return std::make_pair(eigenvalues, eigenVectors);
 }
+/**
+ * @brief Takes a system of n linear equations and returns their solution using the Cramer's method.
+ * 
+ * @param n The number of variables (unknowns)
+ * @param coeffs The coefficients of each variable in form of a vector of vectors
+ * @param constants The constants for each of the n equations in form of a vector of size n
+ * 
+ * @return A vector containing the solution of the given system of equation
+ * 
+ * @throw `std::invalid_argument` If the `coeffs.size() < n` as minimun of n equations are required to determine solution of n unknowns.
+ */
+std::vector<double> MatrixCalculator::solveLinEqn(int n, std::vector<std::vector<double>>& coeffs, std::vector<double>& constants) {
+    //Checks for incorrect inputs:
+    if (coeffs.size() < n) {
+        throw std::invalid_argument("At least n equations are required to solve for n unknowns.");
+    }
+    for (size_t i = 1; i < coeffs.size(); ++i) {
+        if (coeffs[i].empty()) {
+            throw std::invalid_argument("Any input coefficient vector cannot be empty.");
+        }
+    }
+    if (constants.size() < n && constants.size() != coeffs.size()) {
+        throw std::invalid_argument("Each equation should have atleast one constant.");
+    }
+    // Remove extra eqns present if any:
+    if (coeffs.size() > n) {
+        int extras = coeffs.size() - n;
+        for (int i = 0; i < extras; ++i) {
+            coeffs.pop_back();
+            constants.pop_back();
+        }
+    }
+    // Computation of values for each variable:
+    std::vector<double> results(n);
+    double det_D = Matrix(coeffs).determinant();
+    for (int i = 0; i < n; ++i) {
+        double det_Di = Matrix(coeffs).replaceCols(i, constants).determinant();
+        results[i] = (det_Di/ det_D);
+    }
+    return results;
+}
 
 int main() {
     return 0;

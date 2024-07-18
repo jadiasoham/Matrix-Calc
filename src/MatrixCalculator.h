@@ -10,6 +10,7 @@ public:
     Matrix elementWiseProduct(const Matrix& A, const Matrix& B);
     Matrix dotProduct(const Matrix& A, const Matrix& B);
     std::pair<Matrix, Matrix> eigen(const Matrix& A);
+    std::vector<double> solveLinEqn(int n, std::vector<std::vector<double>>& coeffs, std::vector<double>& constants);
 
 private:
     template<typename T>

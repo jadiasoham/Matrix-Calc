@@ -24,7 +24,7 @@ Matrix::Matrix(const std::vector<std::vector<int>>& input) {
  * 
  * @return The matrix data.
  */
-std::vector<std::vector<int>> Matrix::getData() const {
+std::vector<std::vector<double>> Matrix::getData() const {
     return data;
 }
 
@@ -120,7 +120,7 @@ Matrix Matrix::transpose() {
  * @return The rank of the matrix.
  */
 int Matrix::rank() {
-    std::vector<std::vector<int>> copyData = data; // Make a copy of the original matrix
+    std::vector<std::vector<double>> copyData = data; // Make a copy of the original matrix
 
     size_t rows = copyData.size();
     size_t cols = copyData[0].size();
@@ -250,4 +250,46 @@ Matrix Matrix::inverse() {
         }
     }
     return Matrix(inverseMatrix);
+}
+
+/**
+ * @brief Replaces a row in the current matrix with the provided valules.
+ * 
+ * @param n The index of row to replace.
+ * @param data The replacement row.
+ * 
+ * @return `Matrix` with a changed row
+ * 
+ * @throws `std::invalid_argument` if n is out of bounds or if size of row is not equal to the replacement array provided. 
+ */
+Matrix Matrix::replaceRows(int n, std::vector<double>& data) {
+    std::vector<std::vector<double>> currData = getData();
+    // Error Checks:
+    if (n >= currData.size()) {
+        throw std::invalid_argument("The given row index is out of bounds.");
+    }
+    if (data.size() != currData[0].size() ) {
+        throw std::invalid_argument("The given data has values more/ less then can be accomodated in the row.");
+    }
+    currData[n] = data;
+    return Matrix(currData);
+}
+
+/**
+ * @brief Replaces a row in the current matrix with the provided valules.
+ * 
+ * @param n The index of column to replace.
+ * @param data The replacement column.
+ * 
+ * @return `Matrix` with a changed col
+ * 
+ * @throws `std::invalid_argument` if n is out of bounds or if size of column is not equal to the replacement array provided. 
+ */
+Matrix Matrix::replaceCols(int n, std::vector<double>& data) {
+    std::vector<std::vector<double>> currData = getData();
+    int rows = getRows();
+    for (size_t i = 0; i < rows; ++i) {
+        currData[i][n] = data[i];
+    }
+    return Matrix(currData);
 }
