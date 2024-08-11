@@ -260,16 +260,17 @@ Matrix Matrix::inverse() {
  * 
  * @return `Matrix` with a changed row
  * 
- * @throws `std::invalid_argument` if n is out of bounds or if size of row is not equal to the replacement array provided. 
+ * @throws `std::out_of_range` if n is out of bounds,
+ * @throws `std::invalid_argument` if size of row is not equal to the replacement array provided. 
  */
 Matrix Matrix::replaceRows(int n, std::vector<double>& data) {
     std::vector<std::vector<double>> currData = getData();
     // Error Checks:
-    if (n >= currData.size()) {
-        throw std::invalid_argument("The given row index is out of bounds.");
+    if (n >= getRows()) {
+        throw std::out_of_range("Index is out of range.");
     }
     if (data.size() != currData[0].size() ) {
-        throw std::invalid_argument("The given data has values more/ less then can be accomodated in the row.");
+        throw std::invalid_argument("The replacement array must equal the size of of Matrix Row");
     }
     currData[n] = data;
     return Matrix(currData);
@@ -283,9 +284,17 @@ Matrix Matrix::replaceRows(int n, std::vector<double>& data) {
  * 
  * @return `Matrix` with a changed col
  * 
- * @throws `std::invalid_argument` if n is out of bounds or if size of column is not equal to the replacement array provided. 
+ * @throws `std::out_of_range` if n is out of bounds.
+ * @throws `std::invalid_argument` if size of column is not equal to the replacement array provided. 
  */
 Matrix Matrix::replaceCols(int n, std::vector<double>& data) {
+    // Error Checks:
+    if (n >= getCols()) {
+        throw std::out_of_range("Index is out of range.");
+    }
+    if (data.size() != getData()[0].size()) {
+        throw std::invalid_argument("The replacement array must equal the size of Matrix column.");
+    }
     std::vector<std::vector<double>> currData = getData();
     int rows = getRows();
     for (size_t i = 0; i < rows; ++i) {
