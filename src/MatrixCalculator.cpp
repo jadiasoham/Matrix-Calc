@@ -110,7 +110,7 @@ Matrix MatrixCalculator::dotProduct(const Matrix& A, const Matrix& B) {
  */
 template<typename T>
 void MatrixCalculator::findMaxOffDiagonal(const std::vector<std::vector<T>>& matrix, int& p, int& q, T& maxOffDiagonal) {
-    int n matrix.size();
+    int n = matrix.size();
     maxOffDiagonal = 0;
     for (int i = 0; i < n; ++i) {
         for (int j = i + 1; j < n; ++j) {
@@ -148,7 +148,7 @@ std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiE
 
     //initialize the tolerance and maximum iterations:
     const T tolerance = 1e-10;
-    const T toleranceChange = 0.1 * tolerance // Maximum 10% of tolerance change to consider the algo converged 
+    const T toleranceChange = 0.1 * tolerance; // Maximum 10% of tolerance change to consider the algo converged 
     const int maxIter = 1000;
 
     //initialize the variables:
