@@ -1,4 +1,3 @@
-#include <iostream>
 #include "MatrixCalculator.h"
 
 /**
@@ -133,7 +132,8 @@ void MatrixCalculator::findMaxOffDiagonal(const std::vector<std::vector<T>>& mat
  */
 template<typename T>
 std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiEigen(const std::vector<std::vector<T>>& matrix) {
-    int n = matrix.size();
+    std::vector<std::vector<T>> copyMatrix = matrix;
+    int n = copyMatrix.size();
 
     //checks for square matrix:
     if (n != matrix[0].size()) {
@@ -159,7 +159,7 @@ std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiE
     int iterations = 0;
     while(true) {
         //find max diagonal element:
-        findMaxOffDiagonal(matrix, p, q, maxOffDiagonal);
+        findMaxOffDiagonal(copyMatrix, p, q, maxOffDiagonal);
 
         // Check for convergence:
         if (maxOffDiagonal < tolerance || std::abs(maxOffDiagonal - prevMaxOffDiagonal) < toleranceChange || iterations > maxIter) {
@@ -170,7 +170,7 @@ std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiE
         prevMaxOffDiagonal = maxOffDiagonal;
 
         //compute the rotation angle:
-        theta = 0.5 * std::atan2(2 * matrix[p][q], matrix[q][q] - matrix[p][p]);
+        theta = 0.5 * std::atan2(2 * copyMatrix[p][q], copyMatrix[q][q] - copyMatrix[p][p]);
 
         //sine and cosine of the rotation angle:
         s = std::sin(theta);
@@ -187,18 +187,18 @@ std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiE
             if (i != p && i != q) {
                 T a_ip = matrix[i][p];
                 T a_iq = matrix[i][q];
-                matrix[i][p] = c * a_ip - s * a_iq;
-                matrix[p][i] = matrix[i][p];
-                matrix[i][q] = c * a_iq - s * a_ip;
-                matrix[q][i] = matrix[i][q];
+                copyMatrix[i][p] = c * a_ip - s * a_iq;
+                copyMatrix[p][i] = matrix[i][p];
+                copyMatrix[i][q] = c * a_iq - s * a_ip;
+                copyMatrix[q][i] = matrix[i][q];
             }
         }
 
-        T a_pp = matrix[p][p];
-        T a_qq = matrix[q][q];
-        matrix[p][p] = (c * c) * a_pp - 2 * (c * s) * matrix[p][q] + (s * s) * a_qq;
-        matrix[q][q] = (s * s) * a_pp + 2 * (c * s) * matrix[p][q] + (c * c) * a_qq;
-        matrix[p][q] = matrix[q][p] = 0;
+        T a_pp = copyMatrix[p][p];
+        T a_qq = copyMatrix[q][q];
+        copyMatrix[p][p] = (c * c) * a_pp - 2 * (c * s) * copyMatrix[p][q] + (s * s) * a_qq;
+        copyMatrix[q][q] = (s * s) * a_pp + 2 * (c * s) * copyMatrix[p][q] + (c * c) * a_qq;
+        copyMatrix[p][q] = copyMatrix[q][p] = 0;
 
         //update the eigen vectors:
         for (int i = 0; i < n; ++i) {
@@ -212,7 +212,7 @@ std::pair<std::vector<T>, std::vector<std::vector<T>>> MatrixCalculator::jacobiE
     //extract the eigenvalues:
     std::vector<T> eigenvalues(n);
     for (int i = 0; i < n; ++i) {
-        eigenvalues[i] = matrix[i][i];
+        eigenvalues[i] = copyMatrix[i][i];
     }
 
     return std::make_pair(eigenvalues, eigenVectors);

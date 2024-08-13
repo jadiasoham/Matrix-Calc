@@ -302,3 +302,7 @@ Matrix Matrix::replaceCols(int n, std::vector<double>& data) {
     }
     return Matrix(currData);
 }
+
+// int main() {
+//     return 0;
+// }

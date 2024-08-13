@@ -2,6 +2,7 @@
 #define MATRIX_CALCULATOR_H
 
 #include "Matrix.h"
+#include "Matrix.cpp"
 
 class MatrixCalculator {
 public:
