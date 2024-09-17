@@ -33,3 +33,5 @@
 
 # VS Code settings files
 *.json
+.vscode/
+build/
